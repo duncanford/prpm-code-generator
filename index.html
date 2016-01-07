@@ -27,13 +27,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <head>
 
-	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="http://codemirror.net/lib/codemirror.js"></script>
-	<script src="http://codemirror.net/mode/javascript/javascript.js"></script>
-	<link rel="stylesheet" type="text/css" href="http://codemirror.net/mode/javascript/javascript.css">
 	<link rel="stylesheet" type="text/css" href="http://codemirror.net/lib/codemirror.css">
 	<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<style>
 	#code {
 		border: 1px solid black;
@@ -67,10 +62,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	.bs-callout-danger {
 		border-left-color: #D9534F;
 	}
+	
+	img.githublogo {
+		height: 72px;
+		float: right;
+		top: 6px;
+		position: relative;
+	}
+	
+	.tooltip {
+		font-size:1.2em;
+	}
 	</style>
 </head>
 <div class="container">
-<H1>Open UI PR/PM Code Template Generator</H1>
+<div class="row">
+	<H1 class="col-md-8">Open UI PR/PM Code Template Generator</H1>
+	<div class="col-md-4" id="githubkittens"><a href="http://duncanford.github.io/prpm-code-generator"><img class="githublogo" title="<p>You couldn't resist the kittens. Great!.</p><p>Please update your bookmarks. We've <a href='http://duncanford.github.io/prpm-code-generator'>moved to GitHub!</a> to permit collaboration.</p><p>Feel free to submit <a href='https://github.com/duncanford/prpm-code-generator/pulls'>pull-requests</a> if you'd like to make changes to the code generator. If you're less inclined to write code, feel free to submit <a href='https://github.com/duncanford/prpm-code-generator/issues'>issues</a> for the Github project.</p>" data-toggle="tooltip" data-placement="bottom" data-delay='{"hide":5000}' data-html="true" src="https://assets-cdn.github.com/images/modules/dashboard/bootcamp/octocat_fork.png" /></a></div>
+</div>
     <p>Or perhaps you were looking for the <a href="http://tiny.cc/pw-code-generator">PW generator?</a></p>
 <div class="bs-callout bs-callout-danger">If something doesn't look right, try a modern browser</div>
 
@@ -137,6 +146,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div id="code" class="code"></div>
 </div>
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="http://codemirror.net/lib/codemirror.js"></script>
+<script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
 <script>
 	var addComments = true;
 	var addLogging = false;
@@ -187,7 +201,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		GenerateCode()
 	});
 	$("input:radio[name=Logging]").click(function () {
-		debugger;
 		addLogging = $(this).val() == "Yes";
 		GenerateCode();
 	});
@@ -206,6 +219,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		SetDefaultRadio("Logging","logging");
 		init=false;
 		GenerateCode();
+		bindEvents();
 	});
 
 	function addCode(line) {
@@ -444,16 +458,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 			$('input:radio[name='+input+']').filter('[value='+getQueryVariable(qs)+']').prop('checked', true).trigger("click");
 		}
 	}
+	
+	function bindEvents() {
+		$('[data-toggle="tooltip"]').tooltip();
+	}
+	
+	
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  setTimeout(function(){
-    ga('create', 'UA-56575497-1', 'auto');
-    ga('send', 'pageview');
-  },0);
+	setTimeout(function(){
+	ga('create', 'UA-56575497-1', 'auto');
+	ga('send', 'pageview');
+	},0);
   
 </script>
 </html>
