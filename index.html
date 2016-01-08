@@ -210,6 +210,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	});
 
 	$(document).ready(function () {
+		bindEvents();
 		GenerateCode();
 		SetDefault("PRPM","prpm");
 		SetDefault("Namer","name");
@@ -219,7 +220,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		SetDefaultRadio("Logging","logging");
 		init=false;
 		GenerateCode();
-		bindEvents();
 	});
 
 	function addCode(line) {
