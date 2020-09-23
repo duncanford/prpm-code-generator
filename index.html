@@ -188,25 +188,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 			"DesktopForm-def": 'siebel/pmodel',
 			"DesktopForm-ext": 'PresentationModel'
 	}
-    var storeDefExtCR = {
-		"View-def": 'siebel/viewpr',
-			"View-ext": 'ViewPR',
-			"MobileList-def": 'siebel/jqmlistrenderer',
-			"MobileList-ext": 'JQMListRenderer',
-			"MobileForm-def": 'siebel/jqmformrenderer',
-			"MobileForm-ext": 'JQMFormRenderer',
-			"DesktopList-def": 'siebel/jqgridrenderer',
-			"DesktopList-ext": 'JQGridRenderer',
-			"DesktopTree-def": 'siebel/treeappletphyrenderer',
-			"DesktopTree-ext": 'TreeAppletPR',
-			"DesktopForm-def": 'siebel/phyrenderer',
-			"DesktopForm-ext": 'PhysicalRenderer'
-	}
+    
 	$("#Object").on("change", function () {
 		GenerateCode()
 	});
 	$("#PRPM").on("change", function () {
-		GenerateCode()
+        GenerateCode()
+        if ($(this).val() == "CR"){
+            $("#Object").parent().parent().hide();
+        }
+        else{
+            $("#Object").parent().parent().show();
+        }
 	});
 	$("#Namer").on("keyup", function () {
 		GenerateCode()
@@ -410,7 +403,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				strCode += addCode('if (typeof(SiebelAppFacade.TemplateCR) === "undefined") {');
 				strCode += addCode('');
 				strCode += addCode(' SiebelJS.Namespace("SiebelAppFacade.TemplateCR");')
-				strCode += addCode(' define("siebel/custom/TemplateCR", ["' + storeDefExtCR[$("#Object").val() + "-def"] + '"],');
+				strCode += addCode(' define("siebel/custom/TemplateCR", ["siebel/basecr"],');
 				strCode += addCode('  function () {');
 				strCode += addCode('   SiebelAppFacade.TemplateCR = (function () {');
 				strCode += addCode('');
