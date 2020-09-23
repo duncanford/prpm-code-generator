@@ -78,7 +78,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div class="container">
 <div class="row">
 	<H1 class="col-md-8">Open UI PR/PM/CR Code Template Generator</H1>
-	<div class="col-md-4" id="githubkittens"><a href="//duncanford.github.io/prpm-code-generator"><img class="githublogo" title="<p>You couldn't resist. Great!.</p><p>Please update your bookmarks. We've <a href='//duncanford.github.io/prpm-code-generator'>moved to GitHub!</a> to permit collaboration.</p><p>Feel free to submit <a href='//github.com/duncanford/prpm-code-generator/pulls'>pull-requests</a> if you'd like to make changes to the code generator. If you're less inclined to write code, feel free to submit <a href='//github.com/duncanford/prpm-code-generator/issues'>issues</a> for the Github project.</p>" data-toggle="tooltip" data-placement="bottom" data-delay='{"hide":5000}' data-html="true" src="//assets-cdn.github.com/images/modules/dashboard/bootcamp/octocat_fork.png" /></a></div>
 </div>
     <p>Or perhaps you were looking for the <a href="//tiny.cc/pw-code-generator">PW generator</a>, or the <a href="//tiny.cc/disa-code-generator">DISA generator</a>?</p>
 <div class="bs-callout bs-callout-danger">If something doesn't look right, try a modern browser</div>
@@ -189,18 +188,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 			"DesktopForm-ext": 'PresentationModel'
 	}
     var storeDefExtCR = {
-		"View-def": 'siebel/viewpr',
-			"View-ext": 'ViewPR',
-			"MobileList-def": 'siebel/jqmlistrenderer',
-			"MobileList-ext": 'JQMListRenderer',
-			"MobileForm-def": 'siebel/jqmformrenderer',
-			"MobileForm-ext": 'JQMFormRenderer',
-			"DesktopList-def": 'siebel/jqgridrenderer',
-			"DesktopList-ext": 'JQGridRenderer',
-			"DesktopTree-def": 'siebel/treeappletphyrenderer',
-			"DesktopTree-ext": 'TreeAppletPR',
-			"DesktopForm-def": 'siebel/phyrenderer',
-			"DesktopForm-ext": 'PhysicalRenderer'
+		"View-def": 'siebel/basecr',
+			"View-ext": 'BaseCR',
+			"MobileList-def": 'siebel/basecr',
+			"MobileList-ext": 'BaseCR',
+			"MobileForm-def": 'siebel/basecr',
+			"MobileForm-ext": 'BaseCR',
+			"DesktopList-def": 'siebel/basecr',
+			"DesktopList-ext": 'BaseCR',
+			"DesktopTree-def": 'siebel/basecr',
+			"DesktopTree-ext": 'BaseCR',
+			"DesktopForm-def": 'siebel/basecr',
+			"DesktopForm-ext": 'BaseCR'
 	}
 	$("#Object").on("change", function () {
 		GenerateCode()
@@ -406,7 +405,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				strCode += addCode('}');
                 break;
 
-                case "CR":
+			case "CR":
 				strCode += addCode('if (typeof(SiebelAppFacade.TemplateCR) === "undefined") {');
 				strCode += addCode('');
 				strCode += addCode(' SiebelJS.Namespace("SiebelAppFacade.TemplateCR");')
