@@ -77,7 +77,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </head>
 <div class="container">
 <div class="row">
-	<H1 class="col-md-8">Open UI PR/PM Code Template Generator</H1>
+	<H1 class="col-md-8">Open UI PR/PM/CR Code Template Generator</H1>
 	<div class="col-md-4" id="githubkittens"><a href="//duncanford.github.io/prpm-code-generator"><img class="githublogo" title="<p>You couldn't resist. Great!.</p><p>Please update your bookmarks. We've <a href='//duncanford.github.io/prpm-code-generator'>moved to GitHub!</a> to permit collaboration.</p><p>Feel free to submit <a href='//github.com/duncanford/prpm-code-generator/pulls'>pull-requests</a> if you'd like to make changes to the code generator. If you're less inclined to write code, feel free to submit <a href='//github.com/duncanford/prpm-code-generator/issues'>issues</a> for the Github project.</p>" data-toggle="tooltip" data-placement="bottom" data-delay='{"hide":5000}' data-html="true" src="//assets-cdn.github.com/images/modules/dashboard/bootcamp/octocat_fork.png" /></a></div>
 </div>
     <p>Or perhaps you were looking for the <a href="//tiny.cc/pw-code-generator">PW generator</a>, or the <a href="//tiny.cc/disa-code-generator">DISA generator</a>?</p>
@@ -86,11 +86,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <H2>What sort of template would you like</H2>
 <form class="form-horizontal" role="form">
     <div class="form-group">
-        <label for"PRPM" class="col-sm-2 control-label"><abbr title="Physical Renderer or Presentation Model">PR or PM?</abbr></label>
+        <label for"PRPM" class="col-sm-2 control-label"><abbr title="Physical Renderer or Presentation Model or Context Renderer">PR or PM or CR?</abbr></label>
         <div class="col-sm-8">
             <select class="form-control" id="PRPM">
                 <option value="PR">PR</option>
                 <option value="PM">PM</option>
+                <option value="CR">CR</option>
             </select>
         </div>
     </div>
@@ -187,7 +188,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 			"DesktopForm-def": 'siebel/pmodel',
 			"DesktopForm-ext": 'PresentationModel'
 	}
-
+    var storeDefExtCR = {
+		"View-def": 'siebel/viewpr',
+			"View-ext": 'ViewPR',
+			"MobileList-def": 'siebel/jqmlistrenderer',
+			"MobileList-ext": 'JQMListRenderer',
+			"MobileForm-def": 'siebel/jqmformrenderer',
+			"MobileForm-ext": 'JQMFormRenderer',
+			"DesktopList-def": 'siebel/jqgridrenderer',
+			"DesktopList-ext": 'JQGridRenderer',
+			"DesktopTree-def": 'siebel/treeappletphyrenderer',
+			"DesktopTree-ext": 'TreeAppletPR',
+			"DesktopForm-def": 'siebel/phyrenderer',
+			"DesktopForm-ext": 'PhysicalRenderer'
+	}
 	$("#Object").on("change", function () {
 		GenerateCode()
 	});
@@ -236,7 +250,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 	function addPMLog(line) {
 		return addLogging ? '     SiebelJS.Log(this.Get("GetName")+": TemplatePM: ' + line + "\");\n" : "";
-	}
+    }
+    
+    function addCRLog(line){
+        return addLogging ? '     SiebelJS.Log(prContext.GetPM().Get("GetName")+": TemplateCR: ' + line + "\");\n" : "";
+    }
 
 	function GenerateCode() {
 		strCode = "";
@@ -386,13 +404,49 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				strCode += addCode('  return "SiebelAppFacade.TemplatePM";');
 				strCode += addCode(' })');
 				strCode += addCode('}');
+                break;
+
+                case "CR":
+				strCode += addCode('if (typeof(SiebelAppFacade.TemplateCR) === "undefined") {');
+				strCode += addCode('');
+				strCode += addCode(' SiebelJS.Namespace("SiebelAppFacade.TemplateCR");')
+				strCode += addCode(' define("siebel/custom/TemplateCR", ["' + storeDefExtCR[$("#Object").val() + "-def"] + '"],');
+				strCode += addCode('  function () {');
+				strCode += addCode('   SiebelAppFacade.TemplateCR = (function () {');
+				strCode += addCode('');
+				strCode += addCode('    function TemplateCR() {');
+				strCode += addCode('    }');
+				strCode += addCode('');
+				strCode += addCode('    SiebelJS.Extend(TemplateCR, SiebelAppFacade.BaseCR);');
+				strCode += addCode('');
+				strCode += addCode('    TemplateCR.prototype.Init = function (prContext) {');
+                strCode += addComment('     // Init is called after the PR Init method');
+                strCode += addCRLog('     Init method reached.');
+				strCode += addCode('    }');
+				strCode += addCode('');
+				strCode += addCode('    TemplateCR.prototype.Execute = function (prContext) {');
+                strCode += addComment('     // Execute is called after the PR BindData method.');
+                strCode += addCRLog('     Execute method reached.');
+				strCode += addCode('    }');
+				strCode += addCode('');
+				strCode += addCode('    return TemplateCR;');
+				strCode += addCode('   }()');
+				strCode += addCode('  );');
+				strCode += addCode('  return SiebelAppFacade.TemplateCR;');
+				strCode += addCode(' })');
+				strCode += addCode('}');
 				break;
 		}
 
 		strCode = strCode.replace(/TemplatePR/g, $("#Namer").val() + $("#PRPM").val());
-		strCode = strCode.replace(/TemplatePM/g, $("#Namer").val() + $("#PRPM").val());
+        strCode = strCode.replace(/TemplatePM/g, $("#Namer").val() + $("#PRPM").val());
+        strCode = strCode.replace(/TemplateCR/g, $("#Namer").val() + $("#PRPM").val());
 		$("#instruction").html("Copy and save the code below in your custom folder and call it <code>"+$("#Namer").val() + $("#PRPM").val()+".js</code>. Get the <strong>cASe</strong> right, it's important.")
-		if (userProps.length>0) {var done=false;for (prop in userProps)  {
+        
+        if ($("#PRPM").val()=="CR"){
+            $("#instruction").append("<br/><mark>NOTE</mark>:You must include the base PR file in the Manifest Administration with sequence 1.");
+        }
+        if (userProps.length>0) {var done=false;for (prop in userProps)  {
 		 if (userProps[prop]!=""&&!done&&$("#PRPM").val()=="PR") {
 			 $("#instruction").append("<br/><mark>NOTE</mark>:To use custom user properties you will also need a custom PM.");
 			 done=true;
@@ -404,7 +458,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		try{
 			if (!tweaked) {
 				$(parent.document.body).find("#head").remove();
-				$(parent.document.head).prepend("<title>Siebel PR/PM Code Generator</title>")
+				$(parent.document.head).prepend("<title>Siebel PR/PM/CR Code Generator</title>")
 				$(parent.document.body).append("<style>#tabs #result.tCont {padding: 0;}</style>");
 				tweaked=true;
 			}
