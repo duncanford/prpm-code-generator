@@ -205,7 +205,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		GenerateCode()
 	});
 	$("#PRPM").on("change", function () {
-		GenerateCode()
+        GenerateCode()
+        if ($(this).val() == "CR"){
+            $("#Object").parent().parent().hide();
+        }
+        else{
+            $("#Object").parent().parent().show();
+        }
 	});
 	$("#Namer").on("keyup", function () {
 		GenerateCode()
@@ -226,6 +232,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		bindEvents();
 		GenerateCode();
 		SetDefault("PRPM","prpm");
+		debugger;
+		if ($("#PRPM").val() == "CR"){
+            $("#Object").parent().parent().hide();
+        }
+        else{
+            $("#Object").parent().parent().show();
+        }
 		SetDefault("Namer","name");
 		SetDefault("Object","object");
 		SetDefault("UserProps","userprops");
