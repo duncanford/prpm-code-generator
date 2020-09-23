@@ -1,4 +1,4 @@
-# Siebel Open UI PR/PM Code Generator
+# Siebel Open UI PR/PM/CR Code Generator
 
 Welcome to the new home for the code generator.
 
